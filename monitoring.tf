@@ -1,3 +1,4 @@
+# global variables for API
 locals {
   domain = "service-delivery-platform-test.lodestone.com"
   port = 443
@@ -5,7 +6,7 @@ locals {
 }
 
 # /api
-resource "aws_route53_health_check" "api_health_check_lodestone_api" {
+resource "aws_route53_health_check" "api_health_check_lodestone" {
   fqdn              = local.domain
   port              = local.port
   type              = local.type
@@ -17,7 +18,7 @@ resource "aws_route53_health_check" "api_health_check_lodestone_api" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api" {
+resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone" {
   alarm_name                = "api-health-alarm-lodestone-api"
   comparison_operator       = "LessThanThreshold"
   evaluation_periods        = "2"
@@ -30,26 +31,26 @@ resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api" {
   actions_enabled           = true
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.api_health_check_lodestone_api.id
+    HealthCheckId = aws_route53_health_check.api_health_check_lodestone.id
   }
 }
 
 
-# /api/organization
-resource "aws_route53_health_check" "api_health_check_lodestone_api_organization" {
+# /api/health
+resource "aws_route53_health_check" "api_health_check_lodestone_health" {
   fqdn              = local.domain
   port              = local.port
   type              = local.type
-  resource_path     = "/api/organization"
+  resource_path     = "/api/health"
   failure_threshold = "3"
 
   tags = {
-    Name = "hc-lodestone-api-organization"
+    Name = "hc-lodestone-health"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api_organization" {
-  alarm_name                = "api-health-alarm-lodestone-api-organization"
+resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_health" {
+  alarm_name                = "api-health-alarm-lodestone-health"
   comparison_operator       = "LessThanThreshold"
   evaluation_periods        = "2"
   metric_name               = "HealthCheckStatus"
@@ -61,25 +62,25 @@ resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api_organization" {
   actions_enabled           = true
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.api_health_check_lodestone_api_organization.id
+    HealthCheckId = aws_route53_health_check.api_health_check_lodestone_health.id
   }
 }
 
-# /api/cases
-resource "aws_route53_health_check" "api_health_check_lodestone_api_cases" {
+# /api/status
+resource "aws_route53_health_check" "api_health_check_lodestone_status" {
   fqdn              = local.domain
   port              = local.port
   type              = local.type
-  resource_path     = "/api/cases"
+  resource_path     = "/api/status"
   failure_threshold = "3"
 
   tags = {
-    Name = "hc-lodestone-api-cases"
+    Name = "hc-lodestone-status"
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api_cases" {
-  alarm_name                = "api-health-alarm-lodestone-api-cases"
+resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_status" {
+  alarm_name                = "api-health-alarm-lodestone-status"
   comparison_operator       = "LessThanThreshold"
   evaluation_periods        = "2"
   metric_name               = "HealthCheckStatus"
@@ -91,6 +92,6 @@ resource "aws_cloudwatch_metric_alarm" "api_alarm_lodestone_api_cases" {
   actions_enabled           = true
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.api_health_check_lodestone_api_cases.id
+    HealthCheckId = aws_route53_health_check.api_health_check_lodestone_status.id
   }
 }

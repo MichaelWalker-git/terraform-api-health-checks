@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "api_task" {
   container_definitions = jsonencode([
     {
       name  = "api-container",
-      image = "your-docker-image", # Replace with your Docker image URL
+      image = docker_image.nginx.image_id, # Replace with your Docker image URL
       portMappings = [
         {
           containerPort = 80,
